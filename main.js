@@ -7,13 +7,6 @@
 // Hand: Kh Kc 3s 3h 2d (2 Pair) 
 // Hand: Kh Qh 6h 2h 9h (Flush)
 
-// var cards={
-// 	hearts:[0,1,2,3,4,5,6,7,8,9,10,"J","Q","K","A"],
-// 	spades:[0,1,2,3,4,5,6,7,8,9,10,"J","Q","K","A"],
-// 	diamonds:[0,1,2,3,4,5,6,7,8,9,10,"J","Q","K","A"],
-// 	clubs:[0,1,2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
-// };
-// console.log(cards.hearts[11]);
 
 var pokerHand = function(hand){
    
@@ -22,8 +15,25 @@ var pokerHand = function(hand){
   var clubs=[];
   var spades=[];
   var diamonds=[];
-  console.log(handArr);
+
+ var checkStraight= function(arr){
+  var sum=0;
+  for(var i=0;i<arr.length;i++){
+    sum+=arr[i];
+  }
+  if(arr[2]===sum/5){
+    return true;
+  }
+  return false;
+ };
+
   for(var i=0;i<handArr.length;i++){
+
+    if(handArr[i]==="0")
+    {
+      handArr[i]="10";
+    }
+    
   	if(handArr[i]==="J"){
   		handArr[i]="11";
   	}
@@ -58,32 +68,79 @@ var pokerHand = function(hand){
   }
   var cardsBySuit=[];
   cardsBySuit.push(hearts,spades,clubs,diamonds);
+  var allCards=[];
+  allCards=hearts.concat(spades,clubs,diamonds);
+
   for(var i=0;i<4;i++){
-  	if (cardsBySuit[i].length === 5)	
-  	{
-  		cardsBySuit[i].sort();
-       
-  	}
+   
+    if ((cardsBySuit[i].length === 5) && (checkStraight(cardsBySuit[i])===true))  
+    {
+
+    console.log("Straight Flush")
+       return;
+    }else if(cardsBySuit[i].length === 5)
+    {
+      console.log("Flush")
+        return;
+    }
+
   }
- var allCards=[]
- allCards=hearts.concat(spades,clubs,diamonds);
+  allCards.sort();
+ 
 
- allCards.sort();
- console.log(allCards);
- var unique={};
- var counter=0;
+var uniqA=[];
+var uniqB=[];
+ var counterA=1;
  for(var i=0;i<allCards.length-1;i++){
- 	for(var k=i+1;k<5;k++)
- 	{
- 		if(allCards[i]===allCards[k]){
-         counter++;
-         console.log(counter);
- 		}
- 	}
-
-
+  for(var k=4;i<k;k--)
+  {
+    if(allCards[i]===allCards[k]){
+       var cardCom=allCards[k];
+      if(uniqA.length===0 || uniqA[0]=== cardCom)
+      {
+       uniqA.push(allCards[k]);
+      }else
+      {
+        uniqB.push(allCards[k]);
+      }
+      var removeCard=allCards.lastIndexOf(allCards[k]);
+       allCards.splice(removeCard,1);
+    }
+  }
+  
  }
 
+if((uniqA.length===3 || uniqB.length===3)) {
+  console.log("Four Of a kind");
 
+}else if((uniqA.length===1 && uniqB.length===1)) {
+  console.log("two pairs");
+}
+else if((uniqA.length===1 || uniqA.length===2) && (uniqB.length===1 || uniqB.length===2)){
+  console.log("full House");
+}else if((uniqA.length===2 || uniqB.length===2)) {
+  console.log("Three of A kind ");
+}
+else if((uniqA.length===1 || uniqB.length===1)) {
+  console.log("One pAir");
+}else if((uniqA.length===0 && uniqB.length===0) && checkStraight(allCards)===true) {
+  console.log("Straight");
+}
+
+else {
+  console.log("High Card")
+}
+ 
 };     
-pokerHand("8h 8h 8h 7h 9h");                                              
+pokerHand("8h 6h 10h 7h 9h"); 
+pokerHand("Ah As 10c 7d 6s"); 
+pokerHand("Kh Kc 3s 3h 2d");
+pokerHand("Kh Qh 6h 2h 9h");                                   
+pokerHand("Ah As Ad 7h 7c"); 
+pokerHand("6h 5s 4d 3h 2c"); 
+pokerHand("Ah Kh Qh Jh 10h"); 
+pokerHand("Qh Ks Qd 6h Qc"); 
+pokerHand("Ah 8s 8d 8h 8c"); 
+pokerHand("Jh Ks Ad 5h 4c"); 
+pokerHand("Ah Ks 2d Kh 2c"); 
+
